@@ -17,8 +17,9 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 def apply_lora(base_model_path, target_model_path, lora_path):
     print(f"Loading the base model from {base_model_path}")
     base = AutoModelForCausalLM.from_pretrained(
-        base_model_path, torch_dtype=torch.float16, low_cpu_mem_usage=True
+        base_model_path, device_map = "cuda:0", load_in_8bit = True
     )
+    
     base_tokenizer = AutoTokenizer.from_pretrained(base_model_path, use_fast=False)
 
     print(f"Loading the LoRA adapter from {lora_path}")
@@ -26,6 +27,7 @@ def apply_lora(base_model_path, target_model_path, lora_path):
     lora_model = PeftModel.from_pretrained(
         base,
         lora_path,
+        device_map = "cuda:0"
         # torch_dtype=torch.float16
     )
 
