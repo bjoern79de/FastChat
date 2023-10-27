@@ -510,6 +510,7 @@ class PeftModelAdapter:
     def match(self, model_path: str):
         """Accepts any model path with "peft" in the name"""
         if os.path.exists(os.path.join(model_path, "adapter_config.json")):
+            print("detected PEFT model!")
             return True
         return "peft" in model_path.lower()
 
